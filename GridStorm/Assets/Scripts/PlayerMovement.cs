@@ -6,6 +6,16 @@ public class PlayerMovement : MonoBehaviour
 {
     //Controls player movement 
 
+    public int MaxX;
+    public int MaxY;
+    public int MinX;
+    public int MinY;
+
+    [SerializeField] private GameObject gridParent;
+
+
+
+
     [SerializeField] private float Speed;
     private Rigidbody2D rb;
     private CircleCollider2D circleCollider;//may not be nessariy
@@ -29,6 +39,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        MinX = (int)gridParent.GetComponentInChildren<Transform>().GetChild(0).transform.localPosition.x;
+        MinY = (int)gridParent.GetComponentInChildren<Transform>().GetChild(0).transform.localPosition.y;
+        MaxX = (int)gridParent.GetComponentInChildren<Transform>().GetChild(    gridParent.GetComponentInChildren<Transform>().childCount -1   ).transform.localPosition.x;
+        MaxY = (int)gridParent.GetComponentInChildren<Transform>().GetChild(    gridParent.GetComponentInChildren<Transform>().childCount -1   ).transform.localPosition.y;
+
+
+        rb.position = new Vector2(Mathf.Clamp(rb.position.x, MinX, MaxX), Mathf.Clamp(rb.position.y, MinY, MaxY));
+
+
 
         if (isDashing)
         {

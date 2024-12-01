@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GridManager : MonoBehaviour
 {
-    public Sprite sprite;
+    public Sprite[] sprite;
     public float[,] Grid;
     private int Horizontal, Vertical;
     public int Column, Row;
+    [SerializeField] private GameObject GridParent;
 
     private void Awake()
     {   /*
@@ -38,8 +39,10 @@ public class GridManager : MonoBehaviour
 
     private void SpawnTile(float x,float y, float value)
     {
-        GameObject g = new GameObject("X: " + x + "Y: " + y);
-        g.transform.position = new Vector3(             x-((Column-1)/2)           ,             y-((Row-1)/2)            )                                                            ;
+        GameObject g = new GameObject("X: " + x + " Y: " + y);
+        g.transform.parent = GridParent.transform;
+        g.transform.localScale = new Vector3(.6f, .6f, .6f);
+        g.transform.position = new Vector3(x - ((Column - 1) / 2), y - ((Row - 1) / 2),x+y);
         if (Column%2==0)
         {
             g.transform.position = new Vector2(g.transform.position.x - 0.5f, g.transform.position.y);
@@ -49,8 +52,8 @@ public class GridManager : MonoBehaviour
             g.transform.position = new Vector2(g.transform.position.x, g.transform.position.y - 0.5f);
         }
         var s = g.AddComponent<SpriteRenderer>();
-        s.sprite = sprite;
-        s.color = new Color(value%255, value%255, value%255);
+        s.sprite = sprite[Random.Range(0,sprite.Length)];//make sure this includes all possibilities
+
     }
 
     private void Update()
