@@ -6,10 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
     //Controls player movement 
 
-    public int MaxX;
-    public int MaxY;
-    public int MinX;
-    public int MinY;
+    [HideInInspector] public int MaxX;
+    [HideInInspector] public int MaxY;
+    [HideInInspector] public int MinX;
+    [HideInInspector] public int MinY;
 
     [SerializeField] private GameObject gridParent;
 
@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Dash")]
+    public bool DashUnlocked;
     public bool CanDash = true;
     private bool isDashing;
     [SerializeField] private float DashPower;
@@ -34,7 +35,12 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         circleCollider = GetComponent<CircleCollider2D>();
         tr = GetComponent<TrailRenderer>();
-
+        GetComponent<PlayerDeath>().Health = PlayerPrefs.GetInt("Health");
+        if (PlayerPrefs.GetInt("DashUnlocked") == 1)
+            DashUnlocked = true;
+        else
+            DashUnlocked = false;
+        
     }
 
     private void Update()
@@ -61,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(horizontalInput * Speed, verticalInput * Speed);
 
 
-        if (/*Input.GetKeyDown(KeyCode.Mouse0) && CanDash || */Input.GetKeyDown(KeyCode.Q) && CanDash)
+        if (/*Input.GetKeyDown(KeyCode.Mouse0) && CanDash || */Input.GetKeyDown(KeyCode.Q) && CanDash && DashUnlocked)
         {
             StartCoroutine(Dash());
         }
